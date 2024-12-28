@@ -1,0 +1,323 @@
+body {
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  height: calc(100vh - 40px);
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 20px;
+  overflow: hidden;
+}
+
+/* JSON面板样式 */
+.json-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin: 0 5px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* 工具栏样式 */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+/* 按钮基础样式 */
+button {
+  padding: 8px 16px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* 图标按钮样式 */
+.icon-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  background-color: #4a9eff;
+}
+
+.icon-button:hover {
+  background-color: #3d8be6;
+}
+
+.delete-button {
+  background-color: #dc3545;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+/* 分隔线样式 */
+.panel-divider {
+  width: 40px;
+  min-width: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 0;
+  background-color: #f0f0f0;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+/* 方向按钮样式 */
+.direction-btn {
+  padding: 8px;
+  background-color: #4a9eff;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.direction-btn:hover {
+  background-color: #3d8be6;
+}
+
+/* JSON输入框样式 */
+.json-input {
+  flex: 0 0 200px; /* 固定高度 */
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  padding: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #24292e;
+  white-space: pre;
+  overflow-y: auto;
+  overflow-x: auto;
+  max-width: 100%;
+  outline: none;
+}
+
+/* 占位符样式 */
+.json-input:empty:before {
+  content: attr(placeholder);
+  color: #999;
+}
+
+/* JSON语法高亮 */
+.json-input .hljs-attr {
+  color: #0550ae !important; /* JSON键名 - 深蓝色 */
+  font-weight: 500;
+}
+
+.json-input .hljs-string {
+  color: #0a7a00 !important; /* 字符串 - 绿色 */
+  font-weight: 500;
+}
+
+.json-input .hljs-number {
+  color: #116329 !important; /* 数字 - 深绿色 */
+  font-weight: 500;
+}
+
+.json-input .hljs-literal {
+  color: #cf222e !important; /* 布尔值 - 红色 */
+  font-weight: 500;
+}
+
+.json-input .hljs-keyword {
+  color: #cf222e !important; /* null值 - 红色 */
+  font-weight: 500;
+}
+
+.json-input .hljs-punctuation {
+  color: #24292f !important; /* 标点符号 - 深灰色 */
+  font-weight: 500;
+}
+
+/* 有效JSON的样式 */
+.json-input.valid-json {
+  border-color: #4caf50;
+}
+
+/* 无效JSON的样式 */
+.json-input.invalid-json {
+  border-color: #f44336;
+}
+
+/* 缩进指示线 */
+.json-input {
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 20px 100%;
+  background-position: 40px 0;
+}
+
+/* 选中文本的样式 */
+.json-input::selection {
+  background-color: #b4d5fe;
+  color: inherit;
+}
+
+/* 滚动条样式 */
+.json-input::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.json-input::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.json-input::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.json-input::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 复选框标签样式 */
+label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* 预览容器样式 */
+.preview-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* 预览头部样式 */
+.preview-header {
+  padding: 8px 12px;
+  background-color: #f6f8fa;
+  border-bottom: 1px solid #ddd;
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* 预览区域样式 */
+.preview-area {
+  flex: 1;
+  margin: 0;
+  padding: 10px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow: auto;
+  background-color: #ffffff;
+  white-space: pre;
+  tab-size: 2;
+}
+
+/* 预览区域的JSON高亮 */
+.preview-area.hljs,
+.preview-area .hljs {
+  background-color: #ffffff;
+  padding: 0;
+}
+
+.preview-area .hljs-attr {
+  color: #0550ae !important; /* JSON键名 - 深蓝色 */
+  font-weight: 500;
+}
+
+.preview-area .hljs-string {
+  color: #0a7a00 !important; /* 字符串 - 绿色 */
+  font-weight: 500;
+}
+
+.preview-area .hljs-number {
+  color: #116329 !important; /* 数字 - 深绿色 */
+  font-weight: 500;
+}
+
+.preview-area .hljs-literal {
+  color: #cf222e !important; /* 布尔值 - 红色 */
+  font-weight: 500;
+}
+
+.preview-area .hljs-keyword {
+  color: #cf222e !important; /* null值 - 红色 */
+  font-weight: 500;
+}
+
+.preview-area .hljs-punctuation {
+  color: #24292f !important; /* 标点符号 - 深灰色 */
+  font-weight: 500;
+}
+
+/* 预览容器的有效/无效状态 */
+.preview-container.valid-json {
+  border-color: #4caf50;
+}
+
+.preview-container.invalid-json {
+  border-color: #f44336;
+}
+
+/* 预览区域的滚动条样式 */
+.preview-area::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.preview-area::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.preview-area::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.preview-area::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

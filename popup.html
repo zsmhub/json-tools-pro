@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Formatter</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="lib/github.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="json-panel">
+      <div class="toolbar">
+        <div class="toolbar-group">
+          <button id="formatLeft">格式化</button>
+          <button id="compressLeft">压缩</button>
+          <label>
+            <input type="checkbox" id="autoFormatLeft"> 自动格式化
+          </label>
+        </div>
+        <div class="toolbar-group">
+          <button id="copyLeft" class="icon-button">
+            <i class="fas fa-copy"></i> 复制
+          </button>
+          <button id="clearLeft" class="icon-button delete-button">
+            <i class="fas fa-trash"></i> 清除
+          </button>
+        </div>
+      </div>
+      <div id="jsonInputLeft" class="json-input" contenteditable="true" spellcheck="false" placeholder="请输入JSON文本..."></div>
+      <div class="preview-container">
+        <div class="preview-header">格式化预览</div>
+        <pre><code id="previewLeft" class="preview-area language-json"></code></pre>
+      </div>
+    </div>
+
+    <div class="panel-divider">
+      <button id="copyToRight" class="direction-btn" title="复制到右侧">
+        <i class="fas fa-angle-right"></i>
+      </button>
+      <button id="copyToLeft" class="direction-btn" title="复制到左侧">
+        <i class="fas fa-angle-left"></i>
+      </button>
+    </div>
+
+    <div class="json-panel">
+      <div class="toolbar">
+        <div class="toolbar-group">
+          <button id="formatRight">格式化</button>
+          <button id="compressRight">压缩</button>
+          <label>
+            <input type="checkbox" id="autoFormatRight"> 自动格式化
+          </label>
+        </div>
+        <div class="toolbar-group">
+          <button id="copyRight" class="icon-button">
+            <i class="fas fa-copy"></i> 复制
+          </button>
+          <button id="clearRight" class="icon-button delete-button">
+            <i class="fas fa-trash"></i> 清除
+          </button>
+        </div>
+      </div>
+      <div id="jsonInputRight" class="json-input" contenteditable="true" spellcheck="false" placeholder="请输入JSON文本..."></div>
+      <div class="preview-container">
+        <div class="preview-header">格式化预览</div>
+        <pre><code id="previewRight" class="preview-area language-json"></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- 使用本地文件 -->
+  <script src="lib/highlight.min.js"></script>
+  <script src="lib/json.min.js"></script>
+
+  <!-- 然后加载我们的脚本 -->
+  <script src="formatter.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
