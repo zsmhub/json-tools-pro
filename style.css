@@ -1,24 +1,35 @@
-body {
+/* 修改 html 和 body 样式，确保完全填充视口 */
+html, body {
   margin: 0;
-  padding: 3px;
+  padding: 0;
+  width: 100%;
   height: 100vh;
-  box-sizing: border-box;
-  background-color: #f5f5f5;
   overflow: hidden;
 }
 
+body {
+  padding: 3px;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 修改容器样式，使其自适应可用空间 */
 .container {
   display: flex;
   flex-direction: row;
-  height: 100%;
-  max-width: 1600px;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   padding: 0 3px;
-  overflow: hidden;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
-/* JSON面板样式 */
+/* 修改 JSON 面板样式 */
 .json-panel {
   flex: 1;
   display: flex;
@@ -30,8 +41,7 @@ body {
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   margin: 0 4px;
   min-width: 0;
-  max-width: 100%;
-  height: 100%;
+  max-width: calc(50% - 25px); /* 考虑中间分隔栏的宽度 */
   overflow: hidden;
 }
 
@@ -97,10 +107,11 @@ button:hover {
   background-color: #45a049;
 }
 
-/* 分隔线样式 */
+/* 修改分隔线样式 */
 .panel-divider {
   width: 30px;
   min-width: 30px;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -159,7 +170,6 @@ button:hover {
   resize: none;
   box-sizing: border-box;
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-  transition: all 0.2s ease;
 }
 
 /* 输入框悬停样式 */

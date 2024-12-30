@@ -1,4 +1,16 @@
+const MAX_HISTORY_LENGTH = 10;
+let undoHistoryLeft = [];
+let undoHistoryRight = [];
+let currentHistoryIndexLeft = -1;
+let currentHistoryIndexRight = -1;
+
 document.addEventListener('DOMContentLoaded', function() {
+  // 确保 JSONFormatter 对象存在
+  if (typeof JSONFormatter === 'undefined') {
+    console.error('JSONFormatter not loaded');
+    return;
+  }
+
   // 获取左侧面板元素
   const jsonInputLeft = document.querySelector('.json-panel:first-child .json-input');
   const formatBtnLeft = document.getElementById('formatLeft');
@@ -15,8 +27,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 创建面板控制器
   function createPanelController(input, formatBtn, compressBtn) {
+    // 确保输入元素存在
+    if (!input) {
+      console.error('Input element not found');
+      return;
+    }
+
     // 初始化高亮
-    JSONFormatter.applyHighlight(input);
+    try {
+      JSONFormatter.applyHighlight(input);
+    } catch (e) {
+      console.error('Error applying highlight:', e);
+    }
 
     // 格式化函数
     const formatJSON = (text) => {
@@ -85,17 +107,21 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // 初始化两个面板
-  createPanelController(
-    jsonInputLeft,
-    formatBtnLeft,
-    compressBtnLeft
-  );
+  if (jsonInputLeft && formatBtnLeft && compressBtnLeft) {
+    createPanelController(
+      jsonInputLeft,
+      formatBtnLeft,
+      compressBtnLeft
+    );
+  }
 
-  createPanelController(
-    jsonInputRight,
-    formatBtnRight,
-    compressBtnRight
-  );
+  if (jsonInputRight && formatBtnRight && compressBtnRight) {
+    createPanelController(
+      jsonInputRight,
+      formatBtnRight,
+      compressBtnRight
+    );
+  }
 
   // 方向复制按钮事件
   copyToRightBtn.addEventListener('click', () => {
@@ -207,4 +233,70 @@ document.addEventListener('DOMContentLoaded', function() {
       selection.addRange(range);
     }
   }
+
+  document.addEventListener('keydown', function(e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'z') {
+      e.preventDefault();
+      // 确定当前焦点在哪个面板
+      const activeElement = document.activeElement;
+      const leftPanel = document.querySelector('.json-panel:first-child .json-input');
+      const rightPanel = document.querySelector('.json-panel:last-child .json-input');
+
+      if (activeElement === leftPanel) {
+        undo('left');
+      } else if (activeElement === rightPanel) {
+        undo('right');
+      }
+    }
+  });
+
+  // 添加撤销功能
+  function undo(panel) {
+    const history = panel === 'left' ? undoHistoryLeft : undoHistoryRight;
+    const historyIndex = panel === 'left' ? currentHistoryIndexLeft : currentHistoryIndexRight;
+    const input = panel === 'left' ?
+        document.querySelector('.json-panel:first-child .json-input') :
+        document.querySelector('.json-panel:last-child .json-input');
+
+    if (historyIndex > 0) {
+        if (panel === 'left') {
+            currentHistoryIndexLeft--;
+        } else {
+            currentHistoryIndexRight--;
+        }
+        input.textContent = history[historyIndex - 1];
+        // 触发输入事件以更新格式化显示
+        input.dispatchEvent(new Event('input'));
+    }
+  }
+
+  // 为左侧面板添加历史记录
+  jsonInputLeft.addEventListener('input', function(e) {
+    if (!undoHistoryLeft.length || undoHistoryLeft[currentHistoryIndexLeft] !== e.target.textContent) {
+        currentHistoryIndexLeft++;
+        undoHistoryLeft = undoHistoryLeft.slice(0, currentHistoryIndexLeft);
+        undoHistoryLeft.push(e.target.textContent);
+
+        // 限制历史记录长度
+        if (undoHistoryLeft.length > MAX_HISTORY_LENGTH) {
+            undoHistoryLeft = undoHistoryLeft.slice(-MAX_HISTORY_LENGTH);
+            currentHistoryIndexLeft = MAX_HISTORY_LENGTH - 1;
+        }
+    }
+  });
+
+  // 为右侧面板添加历史记录
+  jsonInputRight.addEventListener('input', function(e) {
+    if (!undoHistoryRight.length || undoHistoryRight[currentHistoryIndexRight] !== e.target.textContent) {
+        currentHistoryIndexRight++;
+        undoHistoryRight = undoHistoryRight.slice(0, currentHistoryIndexRight);
+        undoHistoryRight.push(e.target.textContent);
+
+        // 限制历史记录长度
+        if (undoHistoryRight.length > MAX_HISTORY_LENGTH) {
+            undoHistoryRight = undoHistoryRight.slice(-MAX_HISTORY_LENGTH);
+            currentHistoryIndexRight = MAX_HISTORY_LENGTH - 1;
+        }
+    }
+  });
 });
