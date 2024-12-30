@@ -378,9 +378,19 @@ button:hover {
   background: #a8a8a8;
 }
 
-/* 折叠按钮样式 */
+/* 修改 JSON 块样式 */
+.json-block {
+  display: grid;
+  grid-template-columns: 20px 1fr; /* 20px 宽度的折叠按钮列和自适应的内容列 */
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* 修改折叠按钮样式 */
 .fold-button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 16px;
   height: 16px;
   line-height: 16px;
@@ -389,21 +399,34 @@ button:hover {
   color: #666;
   font-size: 10px;
   user-select: none;
-  vertical-align: middle;
-  margin-right: 2px;
+  grid-column: 1; /* 固定在第一列 */
+  margin-top: 2px; /* 微调垂直对齐 */
 }
 
 .fold-button:hover {
   color: #333;
 }
 
-/* JSON块样式 */
-.json-block {
-  display: block;
+/* 修改 JSON 块内容样式 */
+.json-block-content {
+  grid-column: 2; /* 固定在第二列 */
+  min-width: 0;
+  width: 100%;
 }
 
-.json-block-content {
-  margin-left: 4px;
+/* 调整缩进 */
+.json-block {
+  width: 100%;
+}
+
+.json-block .json-block {
+  padding-left: 0; /* 移除额外的缩进，因为我们使用了网格布局 */
+}
+
+/* 确保没有折叠按钮的行也对齐 */
+.json-block > *:not(.fold-button):not(.json-block-content) {
+  grid-column: 2;
+  margin-left: 0;
 }
 
 /* 折叠状态 */
