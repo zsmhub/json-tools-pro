@@ -1,6 +1,6 @@
 当前项目是一个chrome扩展程序，主要功能是一个JSON美化工具，主要功能是格式化和压缩，包含自动格式化和手动格式化。
 
-项目名为：JSON Tools Pro，千万不要改。
+项目名为 JSON Tools Pro，不要改。popup.html的title也改为JSON Tools Pro。popup 固定是普通页面，不要是弹窗。
 
 你需要读懂整个仓库代码，并根据需求修改代码，符合chrome扩展程序的规范。
 
@@ -10,10 +10,46 @@
 
 /**
  * @author AI
- * @description 文件描述
+ * @description
  * @methods
  * @features
+ * @param
+ * @returns
  */
 
 你写的代码，尽可能在关键位置加上注释，方法名，参数，返回值，功能描述，尽可能详细
 特别是一些反复修改的BUG，需要详细描述解决方案
+
+# 这个项目的文件目录结构
+
+JSON Tools Pro/
+├── lib/                      # 第三方库文件目录
+│   ├── highlight.min.js      # 代码高亮库
+│   ├── json.min.js          # JSON处理库
+│   └── github.min.css       # GitHub主题样式
+│
+├── popup.html               # 扩展主界面
+├── popup.js                # 主要功能逻辑
+├── formatter.html          # 格式化器页面
+├── formatter.js            # 格式化逻辑
+├── style.css              # 全局样式文件
+├── background.js          # 后台脚本
+├── manifest.json          # 扩展配置文件
+├── .cursorrules          # 光标规则配置
+└── README.md             # 项目说明文档
+
+主要功能模块：
+1. 界面展示 (popup.html, style.css)
+2. JSON处理 (popup.js, formatter.js)
+3. 第三方库支持 (lib/)
+4. 扩展配置 (manifest.json, background.js)
+
+核心功能：
+- JSON格式化
+- JSON压缩
+- 双向复制
+- 语法高亮
+- 折叠展开
+- 自动格式化
+
+这是一个典型的Chrome扩展程序结构，遵循了Chrome扩展开发的最佳实践。
