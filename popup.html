@@ -15,23 +15,10 @@
         <div class="toolbar-group">
           <button id="formatLeft">格式化</button>
           <button id="compressLeft">压缩</button>
-          <label>
-            <input type="checkbox" id="autoFormatLeft"> 自动格式化
-          </label>
-        </div>
-        <div class="toolbar-group">
-          <button id="copyLeft" class="icon-button">
-            <i class="fas fa-copy"></i> 复制
-          </button>
-          <button id="clearLeft" class="icon-button delete-button">
-            <i class="fas fa-trash"></i> 清除
-          </button>
         </div>
       </div>
-      <div id="jsonInputLeft" class="json-input" contenteditable="true" spellcheck="false" placeholder="请输入JSON文本..."></div>
-      <div class="preview-container">
-        <div class="preview-header">格式化预览</div>
-        <pre><code id="previewLeft" class="preview-area language-json"></code></pre>
+      <div class="json-input-container">
+        <pre class="json-input" contenteditable="true" spellcheck="false" placeholder="请输入JSON文本..."></pre>
       </div>
     </div>
 
@@ -49,23 +36,10 @@
         <div class="toolbar-group">
           <button id="formatRight">格式化</button>
           <button id="compressRight">压缩</button>
-          <label>
-            <input type="checkbox" id="autoFormatRight"> 自动格式化
-          </label>
-        </div>
-        <div class="toolbar-group">
-          <button id="copyRight" class="icon-button">
-            <i class="fas fa-copy"></i> 复制
-          </button>
-          <button id="clearRight" class="icon-button delete-button">
-            <i class="fas fa-trash"></i> 清除
-          </button>
         </div>
       </div>
-      <div id="jsonInputRight" class="json-input" contenteditable="true" spellcheck="false" placeholder="请输入JSON文本..."></div>
-      <div class="preview-container">
-        <div class="preview-header">格式化预览</div>
-        <pre><code id="previewRight" class="preview-area language-json"></code></pre>
+      <div class="json-input-container">
+        <pre id="jsonInputRight" class="json-input" contenteditable="true" spellcheck="false" placeholder="请输入JSON文本..."></pre>
       </div>
     </div>
   </div>

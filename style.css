@@ -1,20 +1,21 @@
 body {
   margin: 0;
-  padding: 20px;
-  min-height: 100vh;
+  padding: 3px;
+  height: 100vh;
   box-sizing: border-box;
   background-color: #f5f5f5;
+  overflow: hidden;
 }
 
 .container {
   display: flex;
   flex-direction: row;
-  gap: 0;
-  height: calc(100vh - 40px);
+  height: 100%;
   max-width: 1600px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 3px;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* JSON面板样式 */
@@ -22,22 +23,34 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 10px;
+  gap: 1px;
+  padding: 6px;
   background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  margin: 0 5px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  margin: 0 4px;
   min-width: 0;
+  max-width: 100%;
+  height: 100%;
   overflow: hidden;
+}
+
+/* JSON输入框容器 */
+.json-input-container {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  margin-top: 1px;
 }
 
 /* 工具栏样式 */
 .toolbar {
+  flex: 0 0 auto;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
-  padding: 10px 0;
+  padding: 1px 0;
   justify-content: space-between;
   flex-wrap: wrap;
   min-width: 0;
@@ -45,94 +58,135 @@ body {
 
 .toolbar-group {
   display: flex;
-  gap: 10px;
+  gap: 6px;
   flex-wrap: wrap;
   min-width: 0;
 }
 
 /* 按钮基础样式 */
 button {
-  padding: 8px 16px;
-  cursor: pointer;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #45a049;
-}
-
-/* 图标按钮样式 */
-.icon-button {
   display: flex;
   align-items: center;
   gap: 5px;
   padding: 8px 12px;
+  cursor: pointer;
   background-color: #4a9eff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  height: 32px;
+  box-sizing: border-box;
 }
 
-.icon-button:hover {
+button:hover {
   background-color: #3d8be6;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
-.delete-button {
-  background-color: #dc3545;
+/* 压缩按钮样式 */
+#compressLeft, #compressRight {
+  background-color: #4CAF50;
 }
 
-.delete-button:hover {
-  background-color: #c82333;
+#compressLeft:hover, #compressRight:hover {
+  background-color: #45a049;
 }
 
 /* 分隔线样式 */
 .panel-divider {
-  width: 40px;
-  min-width: 40px;
+  width: 30px;
+  min-width: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 10px;
-  padding: 10px 0;
-  background-color: #f0f0f0;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
+  gap: 8px;
+  padding: 8px 0;
+  background-color: #f8f9fa;
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
 }
 
 /* 方向按钮样式 */
 .direction-btn {
-  padding: 8px;
+  height: 32px;
+  width: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #4a9eff;
   border: none;
   border-radius: 4px;
   color: white;
   cursor: pointer;
-  transition: background-color 0.3s;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-sizing: border-box;
 }
 
 .direction-btn:hover {
   background-color: #3d8be6;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
 /* JSON输入框样式 */
 .json-input {
-  flex: 0 0 200px; /* 固定高度 */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
-  box-sizing: border-box;
-  font-family: 'Fira Code', 'Consolas', monospace;
-  padding: 10px;
-  font-size: 14px;
-  line-height: 1.6;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #ffffff;
-  color: #24292e;
+  height: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  font-size: 13px;
+  line-height: 1.5;
   white-space: pre;
-  overflow-y: auto;
-  overflow-x: auto;
-  max-width: 100%;
+  overflow: auto;
   outline: none;
+  color: #333;
+  background: #fff;
+  resize: none;
+  box-sizing: border-box;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+}
+
+/* 输入框悬停样式 */
+.json-input:hover {
+  border-color: #4a9eff;
+  box-shadow: inset 0 1px 3px rgba(74, 158, 255, 0.1);
+}
+
+/* 输入框焦点样式 */
+.json-input:focus {
+  border-color: #4a9eff;
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.15);
+  background-color: #fafcff;
+}
+
+/* 有效JSON的输入框焦点样式 - 统一为蓝色 */
+.json-input.valid-json:focus {
+  border-color: #4a9eff;
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.15);
+  background-color: #fafcff;
+}
+
+/* 无效JSON的输入框焦点样式 - 统一为蓝色 */
+.json-input.invalid-json:focus {
+  border-color: #4a9eff;
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.15);
+  background-color: #fafcff;
 }
 
 /* 占位符样式 */
@@ -143,50 +197,43 @@ button:hover {
 
 /* JSON语法高亮 */
 .json-input .hljs-attr {
-  color: #0550ae !important; /* JSON键名 - 深蓝色 */
+  color: #0550ae !important;
   font-weight: 500;
 }
 
 .json-input .hljs-string {
-  color: #0a7a00 !important; /* 字符串 - 绿色 */
+  color: #0969da !important;
   font-weight: 500;
 }
 
 .json-input .hljs-number {
-  color: #116329 !important; /* 数字 - 深绿色 */
+  color: #953800 !important;
   font-weight: 500;
 }
 
 .json-input .hljs-literal {
-  color: #cf222e !important; /* 布尔值 - 红色 */
+  color: #cf222e !important;
   font-weight: 500;
 }
 
 .json-input .hljs-keyword {
-  color: #cf222e !important; /* null值 - 红色 */
+  color: #cf222e !important;
   font-weight: 500;
 }
 
 .json-input .hljs-punctuation {
-  color: #24292f !important; /* 标点符号 - 深灰色 */
+  color: #24292f !important;
   font-weight: 500;
 }
 
 /* 有效JSON的样式 */
 .json-input.valid-json {
-  border-color: #4caf50;
+  border-color: #4a9eff;
 }
 
 /* 无效JSON的样式 */
 .json-input.invalid-json {
   border-color: #f44336;
-}
-
-/* 缩进指示线 */
-.json-input {
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  background-size: 20px 100%;
-  background-position: 40px 0;
 }
 
 /* 选中文本的样式 */
@@ -197,29 +244,28 @@ button:hover {
 
 /* 滚动条样式 */
 .json-input::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 .json-input::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #f5f5f5;
   border-radius: 4px;
 }
 
 .json-input::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: #ddd;
   border-radius: 4px;
+  border: 2px solid #f5f5f5;
+  min-height: 40px;
 }
 
 .json-input::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: #ccc;
 }
 
-/* 复选框标签样式 */
-label {
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.json-input::-webkit-scrollbar-corner {
+  background: #f5f5f5;
 }
 
 /* 预览容器样式 */
@@ -264,32 +310,32 @@ label {
 }
 
 .preview-area .hljs-attr {
-  color: #0550ae !important; /* JSON键名 - 深蓝色 */
+  color: #0550ae !important;
   font-weight: 500;
 }
 
 .preview-area .hljs-string {
-  color: #0a7a00 !important; /* 字符串 - 绿色 */
+  color: #0969da !important;
   font-weight: 500;
 }
 
 .preview-area .hljs-number {
-  color: #116329 !important; /* 数字 - 深绿色 */
+  color: #953800 !important;
   font-weight: 500;
 }
 
 .preview-area .hljs-literal {
-  color: #cf222e !important; /* 布尔值 - 红色 */
+  color: #cf222e !important;
   font-weight: 500;
 }
 
 .preview-area .hljs-keyword {
-  color: #cf222e !important; /* null值 - 红色 */
+  color: #cf222e !important;
   font-weight: 500;
 }
 
 .preview-area .hljs-punctuation {
-  color: #24292f !important; /* 标点符号 - 深灰色 */
+  color: #24292f !important;
   font-weight: 500;
 }
 
@@ -320,4 +366,60 @@ label {
 
 .preview-area::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* 折叠按钮样式 */
+.fold-button {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  cursor: pointer;
+  color: #666;
+  font-size: 10px;
+  user-select: none;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+.fold-button:hover {
+  color: #333;
+}
+
+/* JSON块样式 */
+.json-block {
+  display: block;
+}
+
+.json-block-content {
+  margin-left: 4px;
+}
+
+/* 折叠状态 */
+.folded > .json-block-content {
+  display: none;
+}
+
+.folded > .fold-button {
+  transform: rotate(-90deg);
+}
+
+/* 有效/无效 JSON 样式 */
+.valid-json {
+  border-color: #4CAF50;
+}
+
+.invalid-json {
+  border-color: #f44336;
+}
+
+/* 压缩模式样式 */
+.compressed {
+  white-space: nowrap;
+}
+
+/* 确保面板也能正确滚动 */
+.json-panel {
+  overflow: hidden;
 }

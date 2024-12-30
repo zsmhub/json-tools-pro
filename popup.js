@@ -1,145 +1,210 @@
 document.addEventListener('DOMContentLoaded', function() {
   // 获取左侧面板元素
-  const jsonInputLeft = document.getElementById('jsonInputLeft');
+  const jsonInputLeft = document.querySelector('.json-panel:first-child .json-input');
   const formatBtnLeft = document.getElementById('formatLeft');
   const compressBtnLeft = document.getElementById('compressLeft');
-  const autoFormatCheckboxLeft = document.getElementById('autoFormatLeft');
-  const copyBtnLeft = document.getElementById('copyLeft');
-  const clearBtnLeft = document.getElementById('clearLeft');
 
   // 获取右侧面板元素
-  const jsonInputRight = document.getElementById('jsonInputRight');
+  const jsonInputRight = document.querySelector('.json-panel:last-child .json-input');
   const formatBtnRight = document.getElementById('formatRight');
   const compressBtnRight = document.getElementById('compressRight');
-  const autoFormatCheckboxRight = document.getElementById('autoFormatRight');
-  const copyBtnRight = document.getElementById('copyRight');
-  const clearBtnRight = document.getElementById('clearRight');
 
   // 获取方向按钮
   const copyToRightBtn = document.getElementById('copyToRight');
   const copyToLeftBtn = document.getElementById('copyToLeft');
 
-  // 设置默认自动格式化
-  autoFormatCheckboxLeft.checked = true;
-  autoFormatCheckboxRight.checked = true;
-
   // 创建面板控制器
-  function createPanelController(input, preview, formatBtn, compressBtn, autoFormatCheckbox, copyBtn, clearBtn) {
+  function createPanelController(input, formatBtn, compressBtn) {
     // 初始化高亮
     JSONFormatter.applyHighlight(input);
 
-    // 更新预览区域
-    function updatePreview() {
-      JSONFormatter.formatPreview(input.textContent, preview);
-    }
+    // 格式化函数
+    const formatJSON = (text) => {
+      try {
+        const obj = JSON.parse(text);
+        const formatted = JSONFormatter.format(JSON.stringify(obj));
+        input.textContent = formatted;
+        JSONFormatter.applyHighlight(input);
+      } catch (e) {
+        // 如果不是有效的 JSON，保持原样
+        input.textContent = text;
+        JSONFormatter.applyHighlight(input);
+      }
+    };
 
     // 输入事件
     input.addEventListener('input', () => {
-      if (autoFormatCheckbox.checked) {
-        const formatted = JSONFormatter.format(input.textContent);
-        input.textContent = formatted;
-        JSONFormatter.applyHighlight(input);
-      }
-      updatePreview();
+      // 保存当前的选择范围和文本内容
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
+      const startOffset = range.startOffset;
+      const originalText = input.textContent;
+      const cursorPosition = getCursorPosition(input);
+
+      // 始终进行格式化
+      formatJSON(originalText);
+
+      // 恢复光标位置
+      requestAnimationFrame(() => {
+        try {
+          // 设置光标位置
+          setCursorPosition(input, cursorPosition);
+        } catch (e) {
+          console.error('Error restoring cursor position:', e);
+        }
+      });
     });
 
     // 格式化按钮点击事件
     formatBtn.addEventListener('click', () => {
-      const formatted = JSONFormatter.format(input.textContent);
-      input.textContent = formatted;
-      JSONFormatter.applyHighlight(input);
-      updatePreview();
+      formatJSON(input.textContent);
     });
 
     // 压缩按钮点击事件
     compressBtn.addEventListener('click', () => {
-      const compressed = JSONFormatter.compress(input.textContent);
-      input.textContent = compressed;
-      JSONFormatter.applyHighlight(input);
-      updatePreview();
-    });
-
-    // 复制按钮点击事件
-    copyBtn.addEventListener('click', () => {
-      const selectedText = window.getSelection().toString();
-      const textToCopy = selectedText || input.textContent;
-
-      if (textToCopy) {
-        navigator.clipboard.writeText(textToCopy).then(() => {
-          showCopySuccess(copyBtn);
-        });
+      try {
+        const compressed = JSONFormatter.compress(input.textContent);
+        input.textContent = compressed;
+        JSONFormatter.applyCompressedHighlight(input);
+      } catch (e) {
+        console.error('Compression failed:', e);
       }
-    });
-
-    // 清除按钮点击事件
-    clearBtn.addEventListener('click', () => {
-      input.textContent = '';
-      preview.textContent = '';
-      preview.parentElement.classList.remove('valid-json', 'invalid-json');
-      input.dispatchEvent(new Event('input'));
     });
 
     // 粘贴事件
     input.addEventListener('paste', (e) => {
       e.preventDefault();
       const text = e.clipboardData.getData('text');
-      try {
-        const obj = JSON.parse(text);
-        const formatted = JSON.stringify(obj, null, 2);
-        input.textContent = formatted;
-      } catch (e) {
-        input.textContent = text;
-      }
+
+      // 直接格式化粘贴的内容
+      formatJSON(text);
+
+      // 触发输入事件以更新状态
       input.dispatchEvent(new Event('input'));
     });
-
-    // 初始更新预览
-    updatePreview();
-
-    return { updatePreview };
   }
 
   // 初始化两个面板
-  const previewLeft = document.getElementById('previewLeft');
-  const previewRight = document.getElementById('previewRight');
-
-  const leftPanel = createPanelController(
+  createPanelController(
     jsonInputLeft,
-    previewLeft,
     formatBtnLeft,
-    compressBtnLeft,
-    autoFormatCheckboxLeft,
-    copyBtnLeft,
-    clearBtnLeft
+    compressBtnLeft
   );
 
-  const rightPanel = createPanelController(
+  createPanelController(
     jsonInputRight,
-    previewRight,
     formatBtnRight,
-    compressBtnRight,
-    autoFormatCheckboxRight,
-    copyBtnRight,
-    clearBtnRight
+    compressBtnRight
   );
 
   // 方向复制按钮事件
   copyToRightBtn.addEventListener('click', () => {
-    jsonInputRight.textContent = jsonInputLeft.textContent;
-    jsonInputRight.dispatchEvent(new Event('input'));
+    try {
+      // 直接复制 HTML 内容
+      jsonInputRight.innerHTML = jsonInputLeft.innerHTML;
+
+      // 重新绑定折叠事件监听器
+      const foldButtons = jsonInputRight.getElementsByClassName('fold-button');
+      Array.from(foldButtons).forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.stopPropagation();
+          JSONFormatter.handleFold(button.parentElement);
+        });
+      });
+
+      // 设置正确的类
+      if (jsonInputLeft.classList.contains('valid-json')) {
+        jsonInputRight.classList.add('valid-json');
+        jsonInputRight.classList.remove('invalid-json');
+      } else {
+        jsonInputRight.classList.add('invalid-json');
+        jsonInputRight.classList.remove('valid-json');
+      }
+    } catch (e) {
+      console.error('Copy failed:', e);
+    }
   });
 
   copyToLeftBtn.addEventListener('click', () => {
-    jsonInputLeft.textContent = jsonInputRight.textContent;
-    jsonInputLeft.dispatchEvent(new Event('input'));
+    try {
+      // 直接复制 HTML 内容
+      jsonInputLeft.innerHTML = jsonInputRight.innerHTML;
+
+      // 重新绑定折叠事件监听器
+      const foldButtons = jsonInputLeft.getElementsByClassName('fold-button');
+      Array.from(foldButtons).forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.stopPropagation();
+          JSONFormatter.handleFold(button.parentElement);
+        });
+      });
+
+      // 设置正确的类
+      if (jsonInputRight.classList.contains('valid-json')) {
+        jsonInputLeft.classList.add('valid-json');
+        jsonInputLeft.classList.remove('invalid-json');
+      } else {
+        jsonInputLeft.classList.add('invalid-json');
+        jsonInputLeft.classList.remove('valid-json');
+      }
+    } catch (e) {
+      console.error('Copy failed:', e);
+    }
   });
 
-  // 辅助函数
-  function showCopySuccess(btn) {
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-check"></i> 已复制';
-    setTimeout(() => {
-      btn.innerHTML = originalText;
-    }, 2000);
+  // 获取光标位置
+  function getCursorPosition(element) {
+    const selection = window.getSelection();
+    let position = 0;
+
+    if (selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      const preCaretRange = range.cloneRange();
+      preCaretRange.selectNodeContents(element);
+      preCaretRange.setEnd(range.endContainer, range.endOffset);
+      position = preCaretRange.toString().length;
+    }
+
+    return position;
+  }
+
+  // 设置光标位置
+  function setCursorPosition(element, position) {
+    const range = document.createRange();
+    const selection = window.getSelection();
+
+    // 遍历文本节点找到正确的位置
+    let currentPos = 0;
+    let targetNode = null;
+    let targetOffset = 0;
+
+    function traverseNodes(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const length = node.textContent.length;
+        if (currentPos + length >= position) {
+          targetNode = node;
+          targetOffset = position - currentPos;
+          return true;
+        }
+        currentPos += length;
+      } else {
+        const childNodes = Array.from(node.childNodes);
+        for (const child of childNodes) {
+          if (traverseNodes(child)) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    traverseNodes(element);
+
+    if (targetNode) {
+      range.setStart(targetNode, targetOffset);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
   }
 });
